@@ -1,0 +1,52 @@
+﻿Reflect Small Database Framework
+
+Add the Library to your ASP.NET (MVC) Project, Create a Config.xml file in App_Data.
+
+Example Configuration File.
+
+<?xml version="1.0" encoding="utf-8" ?>
+<Domains>
+  <Domain Target="localhost">
+    <Configuration>
+      <add key="ConnectionString" value="Server=LOCALHOST;Database=ReflectDB"/>
+      <add key="CryptoLevel" value="0"/>
+      <add key="DBLog" value="0"/>
+      <add key="CryptoHash" value=""/>
+      <add key="CryptoSalt" value=""/>
+      <add key="CryptoVI" value=""/>
+    </Configuration>
+  </Domain>
+</Domains>
+
+Creating Models.
+
+Create a new empty class and implement the ReflectEntity base class.
+
+public class Example : Reflect.ReflectEntity
+{
+	public string Text { get; set; }
+}
+
+After calling Reflect.Engine.CreateDomain the database and tables will be automatically created/updated.
+
+Fetching Data by Filters
+
+List<Query.Filter> Filters = new List<Query.Filter>();
+
+Filters.Add(new Query.Filter()
+{
+    Combine = Query.FilterCombine.AND,
+    Column = "Text",
+    Condition = Query.FilterCondition.Equals,
+    Value = "ExampleValue"
+});
+
+Engine.GetAllByFilters(Filters);
+
+You can also use the Count and Page parameter to page the results.
+
+If you create Repositories implementing the DataRepository base class, the CRUD methods and fetching the list methods will be created automatically.
+
+Experimental Feature:
+
+Encrypting the columns, values and table names can be enabled with the CryptoLevel configuration, but this feature is not stable yet.
